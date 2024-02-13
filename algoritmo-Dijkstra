@@ -1,0 +1,35 @@
+import sys
+import heapq
+
+def dijkstra(grafo, origem):
+
+    distancias = {v: sys.maxsize for v in grafo}
+    distancias[origem] = 0
+
+    fila_prioridade = [(0, origem)]
+
+    while fila_prioridade:
+
+        distancia_atual, vertice_atual = heapq.heappop(fila_prioridade)
+
+        for vizinho, peso in grafo[vertice_atual].items():
+            nova_distancia = distancias[vertice_atual] + peso
+            if nova_distancia < distancias[vizinho]:
+                distancias[vizinho] = nova_distancia
+                heapq.heappush(fila_prioridade, (nova_distancia, vizinho))
+
+    return distancias
+grafo = {
+    'A': {'B': 5, 'C': 3, 'D': 2},
+    'B': {'A': 5, 'C': 2, 'E': 4},
+    'C': {'A': 3, 'B': 2, 'D': 1},
+    'D': {'A': 2, 'C': 1, 'E': 7},
+    'E': {'B': 4, 'D': 7}
+}
+
+origem = 'A'
+
+caminhos_mais_curto = dijkstra(grafo, origem)
+
+for destino, distancia in caminhos_mais_curto.items():
+    print(f"Caminho mais curto de {origem} para {destino}: {distancia}")
